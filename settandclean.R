@@ -34,9 +34,26 @@ tidydata$code <- activity_labels[tidydata$code, 2]
 
 
 ## 4- Appropriately labels the data set with descriptive variable names.
-
+names(tidydata)[2] = "Activity"
+names(tidydata)<-gsub("Acc", "Accelerometer", names(tidydata))
+names(tidydata)<-gsub("Gyro", "Gyroscope", names(tidydata))
+names(tidydata)<-gsub("BodyBody", "Body", names(tidydata))
+names(tidydata)<-gsub("Mag", "Magnitude", names(tidydata))
+names(tidydata)<-gsub("^t", "Time", names(tidydata))
+names(tidydata)<-gsub("^f", "Frequency", names(tidydata))
+names(tidydata)<-gsub("tBody", "TimeBody", names(tidydata))
+names(tidydata)<-gsub("-mean()", "Mean", names(tidydata), ignore.case = TRUE)
+names(tidydata)<-gsub("-std()", "STD", names(tidydata), ignore.case = TRUE)
+names(tidydata)<-gsub("-freq()", "Frequency", names(tidydata), ignore.case = TRUE)
+names(tidydata)<-gsub("angle", "Angle", names(tidydata))
+names(tidydata)<-gsub("gravity", "Gravity", names(tidydata))
 
 
 ## 5 - From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
+resultado <- tidydata %>%
+  group_by(subject, 'activity') %>%
+  summarise_all(funs(mean))
+write.table(resultado, "Results.txt", row.name=FALSE)
 
-
+str(resultado)
+resultado
